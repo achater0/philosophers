@@ -6,7 +6,7 @@
 /*   By: achater <achater@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 10:41:43 by achater           #+#    #+#             */
-/*   Updated: 2024/06/08 11:26:38 by achater          ###   ########.fr       */
+/*   Updated: 2024/06/08 14:19:06 by achater          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void mutex_destroy(t_data *data)
 {
 	int	i;
 
+	usleep(100);
 	pthread_mutex_destroy(&data->print_lock);
 	pthread_mutex_destroy(&data->time_lock);
 	pthread_mutex_destroy(&data->meals_lock);
@@ -52,16 +53,12 @@ void ft_eat(int time, t_philosopher *philosopher)
 {
 	pthread_mutex_lock(philosopher->left_fork);
 	pthread_mutex_lock(&philosopher->data->print_lock);
-	if (philosopher->data->dead == 0)
-		printf("%lld %d has taken a fork\n", current_time_ms() - philosopher->data->start_time, philosopher->id);
+	printf("%lld %d has taken a fork\n", current_time_ms() - philosopher->data->start_time, philosopher->id);
 	pthread_mutex_unlock(&philosopher->data->print_lock);
 	pthread_mutex_lock(philosopher->right_fork);
 	pthread_mutex_lock(&philosopher->data->print_lock);
-	if (philosopher->data->dead == 0)
-	{
-		printf("%lld %d has taken a fork\n", current_time_ms() - philosopher->data->start_time, philosopher->id);
-		printf("%lld %d is eating\n", current_time_ms() - philosopher->data->start_time, philosopher->id);
-	}
+	printf("%lld %d has taken a fork\n", current_time_ms() - philosopher->data->start_time, philosopher->id);
+	printf("%lld %d is eating\n", current_time_ms() - philosopher->data->start_time, philosopher->id);
 	pthread_mutex_unlock(&philosopher->data->print_lock);
 	pthread_mutex_lock(&philosopher->data->meals_lock);
 	philosopher->times_eaten++;
@@ -82,15 +79,15 @@ void	*philosopher_routine(t_philosopher *philosopher)
 		my_usleep(philosopher->data->time_to_eat / 2);
 	while (1)
 	{
+		if (philosopher->data->meals_needed != -1 && philosopher->times_eaten == philosopher->data->meals_needed)
+			return (NULL);
 		ft_eat(philosopher->data->time_to_eat, philosopher);
 		pthread_mutex_lock(&philosopher->data->print_lock);
-		if (philosopher->data->dead == 0)
-			printf("%lld %d is sleeping\n", current_time_ms() - philosopher->data->start_time, philosopher->id);
+		printf("%lld %d is sleeping\n", current_time_ms() - philosopher->data->start_time, philosopher->id);
 		pthread_mutex_unlock(&philosopher->data->print_lock);
 		my_usleep(philosopher->data->time_to_sleep);
 		pthread_mutex_lock(&philosopher->data->print_lock);
-		if (philosopher->data->dead == 0)
-			printf("%lld %d is thinking\n", current_time_ms() - philosopher->data->start_time, philosopher->id);
+		printf("%lld %d is thinking\n", current_time_ms() - philosopher->data->start_time, philosopher->id);
 		pthread_mutex_unlock(&philosopher->data->print_lock);
 	}
 	return (NULL);
@@ -113,7 +110,6 @@ void	monitor_routine(t_data *data)
 			if (data->all_ate == data->num_philosophers)
 			{
 				pthread_mutex_unlock(&data->meals_lock);
-
 				return ;
 			}
 			pthread_mutex_unlock(&data->meals_lock);
@@ -121,7 +117,6 @@ void	monitor_routine(t_data *data)
 			pthread_mutex_lock(&data->time_lock);
 			if (current_time_ms() - data->philosophers[i].last_meal_time >= data->time_to_die)
 			{
-				data->dead = 1;
 				printf("%lld %d died\n", current_time_ms() - data->start_time, data->philosophers[i].id);
 				pthread_mutex_unlock(&data->time_lock);
 				return ;
@@ -130,6 +125,5 @@ void	monitor_routine(t_data *data)
 			pthread_mutex_unlock(&data->print_lock);
 			i++;
 		}
-		usleep(100);
 	}
 }

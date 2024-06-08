@@ -2,7 +2,7 @@ SRCS = philo.c pars.c utils.c
 OBJS = $(SRCS:.c=.o)
 NAME = philo
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -fsanitize=thread -g
+CFLAGS = -Wall -Wextra -Werror #-fsanitize=thread -g
 
 
 all: ${NAME}

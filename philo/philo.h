@@ -6,7 +6,7 @@
 /*   By: achater <achater@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 12:12:00 by achater           #+#    #+#             */
-/*   Updated: 2024/06/08 11:26:17 by achater          ###   ########.fr       */
+/*   Updated: 2024/06/08 12:12:19 by achater          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,6 @@ typedef struct s_data {
     int time_to_sleep;
     int meals_needed;
     int all_ate;
-    int dead;
-    pthread_t monitor;
     pthread_mutex_t time_lock;
     pthread_mutex_t meals_lock;
     pthread_mutex_t *forks;

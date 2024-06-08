@@ -6,7 +6,7 @@
 /*   By: achater <achater@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 12:12:10 by achater           #+#    #+#             */
-/*   Updated: 2024/06/08 11:26:28 by achater          ###   ########.fr       */
+/*   Updated: 2024/06/08 12:11:44 by achater          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ void	init_data(t_data *data, char	**av, int 	ac)
 		data->meals_needed = -1;
 	data->all_ate = 0;
 	data->start_time = current_time_ms();
-	data->dead = 0;
 	pthread_mutex_init(&data->print_lock, NULL);
 	pthread_mutex_init(&data->meals_lock, NULL);
 	pthread_mutex_init(&data->time_lock, NULL);
