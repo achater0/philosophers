@@ -6,7 +6,7 @@
 /*   By: achater <achater@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 12:12:00 by achater           #+#    #+#             */
-/*   Updated: 2024/06/06 13:55:41 by achater          ###   ########.fr       */
+/*   Updated: 2024/06/08 11:26:17 by achater          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 
 typedef struct s_philosopher {
     int id;
+    int flag;
     int times_eaten;
     long long last_meal_time;
     pthread_t thread;
@@ -36,7 +37,10 @@ typedef struct s_data {
     int time_to_sleep;
     int meals_needed;
     int all_ate;
+    int dead;
     pthread_t monitor;
+    pthread_mutex_t time_lock;
+    pthread_mutex_t meals_lock;
     pthread_mutex_t *forks;
     pthread_mutex_t print_lock;
     long long start_time;
@@ -46,8 +50,8 @@ typedef struct s_data {
 int	parse_arg(char *str);
 long long	current_time_ms(void);
 void	*philosopher_routine(t_philosopher *philosopher);
-void *monitor_routine(t_data *data);
-
+void    monitor_routine(t_data *data);
+void    mutex_destroy(t_data *data);
 
 
 # endif

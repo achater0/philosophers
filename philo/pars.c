@@ -6,7 +6,7 @@
 /*   By: achater <achater@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 12:32:52 by achater           #+#    #+#             */
-/*   Updated: 2024/06/03 12:45:56 by achater          ###   ########.fr       */
+/*   Updated: 2024/06/07 15:08:23 by achater          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,7 @@ int	ft_atoi(char *str)
 	{
 		nb = nb * 10 + str[i] - '0';
 		if (nb > 2147483647)
-		{
-			printf("Error: Argument too big\n");
-			exit(1);
-		}
+			return (-1);
 		i++;
 	}
 	return (nb);
@@ -57,7 +54,7 @@ int	parse_arg(char *str)
 	if(check_arg(str) == 0)
 	{
 		printf("Error: Invalid argument\n");
-		exit(1);
+		return (-1);
 	}
 	i = ft_atoi(str);
 	return (i);
